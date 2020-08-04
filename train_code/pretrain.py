@@ -9,11 +9,11 @@ by Xinrui Wang and Jinze yu
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
-import utils
+from . import utils
 import os
 import numpy as np
 import argparse
-import network 
+from . import network
 from tqdm import tqdm
 
 
@@ -110,7 +110,6 @@ def train(args):
  
             
 if __name__ == '__main__':
-    
     args = arg_parser()
     train(args)  
    

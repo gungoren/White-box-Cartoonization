@@ -8,15 +8,15 @@ by Xinrui Wang and Jinze yu
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
-import utils
+from . import utils
 import os
 import numpy as np
 import argparse
-import network 
-import loss
+from . import network
+from . import loss
 
 from tqdm import tqdm
-from guided_filter import guided_filter
+from .guided_filter import guided_filter
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
