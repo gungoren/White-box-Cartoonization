@@ -34,8 +34,8 @@ def cartoonize(load_folder, save_folder, model_path):
         None
 
     tf.reset_default_graph()
-
-    input_photo = tf.placeholder(tf.float32, [1, None, None, 3])
+    size = 512
+    input_photo = tf.placeholder(tf.float32, [1, size, size, 3])
     network_out = network.unet_generator(input_photo)
     final_out = guided_filter.guided_filter(input_photo, network_out, r=1, eps=5e-3)
 
@@ -81,30 +81,16 @@ def cartoonize(load_folder, save_folder, model_path):
     print(nodes)
 
     # Convert the model.
-    converter = tf.lite.TFLiteConverter.from_saved_model(model_path)
+    converter = tf.lite.TFLiteConverter.from_session(sess, [input_photo], [final_out]) # -- 7.6MB
+    converter.optimizations = [tf.lite.Optimize.DEFAULT] # -- 3.7 MB
+
     tflite_model = converter.convert()
 
     # Save the TF Lite model.
     with tf.io.gfile.GFile('model.tflite', 'wb') as f:
         f.write(tflite_model)
 
-    name_list = os.listdir(load_folder)
-    for name in tqdm(name_list):
-        try:
-            load_path = os.path.join(load_folder, name)
-            save_path = os.path.join(save_folder, name)
-            image = cv2.imread(load_path)
-            image = resize_crop(image)
-            batch_image = image.astype(np.float32)/127.5 - 1
-            batch_image = np.expand_dims(batch_image, axis=0)
-            output = sess.run(final_out, feed_dict={input_photo: batch_image})
-            output = (np.squeeze(output)+1)*127.5
-            output = np.clip(output, 0, 255).astype(np.uint8)
-            cv2.imwrite(save_path, output)
-        except:
-            print('cartoonize {} failed'.format(load_path))
-
-
+    print("tflite model saved")
     
 
 if __name__ == '__main__':

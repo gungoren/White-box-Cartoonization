@@ -16,7 +16,7 @@ def freeze_graph_func(model_dir, output_node_names, output_dir):
         output_node_names: a string, containing all the output node's names,
                             comma separated
     """
-    if not tf.gfile.Exists(model_dir):
+    if not tf.io.gfile.exists(model_dir):
         raise AssertionError(
             "Export directory doesn't exists. Please specify an export "
             "directory: %s" % model_dir)
@@ -25,8 +25,8 @@ def freeze_graph_func(model_dir, output_node_names, output_dir):
         print("You need to supply the name of a node to --output_node_names.")
         return -1
 
-    sub_dirs = [name for name in os.listdir(model_dir) if os.path.isdir(os.path.join(model_dir, name))]
-    model_dir = os.path.join(model_dir, sub_dirs[0])
+    # sub_dirs = [name for name in os.listdir(model_dir) if os.path.isdir(os.path.join(model_dir, name))]
+    # model_dir = os.path.join(model_dir, sub_dirs[0])
 
     output_graph_filename = os.path.join(output_dir, 'frozen_model.pb')
     initializer_nodes = ''
@@ -49,7 +49,7 @@ def freeze_graph_func(model_dir, output_node_names, output_dir):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model_dir", type=str, default="save_models", help="Model folder to export")
+    parser.add_argument("--model_dir", type=str, default="saved_models", help="Model folder to export")
     parser.add_argument("--output_node_names", type=str, default="ExpandDims,softmax_tensor", help="The name of the output nodes, comma separated.")
     parser.add_argument("--output_dir", type=str, default=".", help="output directory to keep frozen model.")
     args = parser.parse_args()

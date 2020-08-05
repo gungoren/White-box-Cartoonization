@@ -23,7 +23,6 @@ def resize_crop(image):
     h, w = (h//8)*8, (w//8)*8
     image = image[:h, :w, :]
     return image
-    
 
 def cartoonize(load_folder, save_folder, model_path):
     try:
@@ -47,6 +46,45 @@ def cartoonize(load_folder, save_folder, model_path):
 
     sess.run(tf.global_variables_initializer())
     saver.restore(sess, tf.train.latest_checkpoint(model_path))
+
+    """
+    model_dir = model_path
+    output_graph_filename = os.path.join(model_dir, 'frozen_model.pb')
+    initializer_nodes = ''
+    freeze_graph(
+        input_graph=None,
+        input_saver=False,
+        input_binary=False,
+        input_checkpoint=None,
+        output_node_names=output_node_names,
+        restore_op_name=None,
+        filename_tensor_name=None,
+        output_graph=output_graph_filename,
+        clear_devices=True,
+        initializer_nodes=initializer_nodes,
+        input_meta_graph=False,
+        input_saved_model_dir=model_dir,
+        saved_model_tags=tag_constants.SERVING)
+    """
+
+
+    tf.train.write_graph(tf.get_default_graph(), model_path, 'saved_model.pb', as_text=False)
+    tf.train.write_graph(tf.get_default_graph(), model_path, 'saved_model.pbtxt', as_text=True)
+
+    gf = tf.GraphDef()
+    gf.ParseFromString(open(os.path.join(model_path, 'saved_model.pb'), 'rb').read())
+
+    nodes = [n.name + '=>' + n.op for n in gf.node if n.op in ('Softmax', 'Placeholder')]
+    print(nodes)
+
+    # Convert the model.
+    converter = tf.lite.TFLiteConverter.from_saved_model(model_path)
+    tflite_model = converter.convert()
+
+    # Save the TF Lite model.
+    with tf.io.gfile.GFile('model.tflite', 'wb') as f:
+        f.write(tflite_model)
+
     name_list = os.listdir(load_folder)
     for name in tqdm(name_list):
         try:
