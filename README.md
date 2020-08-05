@@ -3,9 +3,11 @@
 <br><br><br>
 
 # [CVPR2020]Learning to Cartoonize Using White-box Cartoon Representations
-[project page](https://systemerrorwang.github.io/White-box-Cartoonization/) |   [paper](https://github.com/SystemErrorWang/White-box-Cartoonization/blob/master/paper/06791.pdf) |   [twitter](https://twitter.com/IlIIlIIIllIllII/status/1243108510423896065) |   [zhihu](https://zhuanlan.zhihu.com/p/117422157) |   [bilibili](https://www.bilibili.com/video/av56708333)
+[project page](https://systemerrorwang.github.io/White-box-Cartoonization/) |   [paper](https://github.com/SystemErrorWang/White-box-Cartoonization/blob/master/paper/06791.pdf) |   [twitter](https://twitter.com/IlIIlIIIllIllII/status/1243108510423896065) |   [zhihu](https://zhuanlan.zhihu.com/p/117422157) |   [bilibili](https://www.bilibili.com/video/av56708333) |  [facial model](https://github.com/SystemErrorWang/FacialCartoonization)
 
-Tensorflow implementation for CVPR2020 paper “Learning to Cartoonize Using White-box Cartoon Representations”.
+- Tensorflow implementation for CVPR2020 paper “Learning to Cartoonize Using White-box Cartoon Representations”.
+- Improved method for facial images are now available:
+- https://github.com/SystemErrorWang/FacialCartoonization
 
 <img src="images/method.jpg" width="1000px"/>
 <img src="images/use_cases.jpg" width="1000px"/>
@@ -27,6 +29,14 @@ Tensorflow implementation for CVPR2020 paper “Learning to Cartoonize Using Whi
 <img src="images/person2.jpg" width="1000px"/>
 
 ### More Images Are Shown In The Supplementary Materials
+
+
+## Online demo
+
+- Some kind people made online demo for this project
+- Demo link: https://cartoonize-lkqov62dia-de.a.run.app/cartoonize
+- Code: https://github.com/experience-ml/cartoonize
+- Sample Demo: https://www.youtube.com/watch?v=GqduSLcmhto&feature=emb_title
 
 ## Prerequisites
 
@@ -78,9 +88,9 @@ https://drive.google.com/file/d/1j0jDENjdwxCDb36meP6-u5xDBzmKBOjJ/view?usp=shari
 We are grateful for the help from Lvmin Zhang and Style2Paints Research
 
 ## License
-Copyright (C) Xinrui Wang, Jinze Yu. All rights reserved. Licensed under the CC BY-NC-SA 4.0 
-Also, Commercial application is prohibited
-license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
+- Copyright (C) Xinrui Wang All rights reserved. Licensed under the CC BY-NC-SA 4.0 
+- license (https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
+- Commercial application is prohibited, please remain this license if you clone this repo
 
 ## Citation
 
