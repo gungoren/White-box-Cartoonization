@@ -50,39 +50,13 @@ def cartoonize(load_folder, save_folder, model_path):
     sess.run(tf.global_variables_initializer())
     saver.restore(sess, tf.train.latest_checkpoint(model_path))
 
-    """
-    model_dir = model_path
-    output_graph_filename = os.path.join(model_dir, 'frozen_model.pb')
-    initializer_nodes = ''
-    freeze_graph(
-        input_graph=None,
-        input_saver=False,
-        input_binary=False,
-        input_checkpoint=None,
-        output_node_names=output_node_names,
-        restore_op_name=None,
-        filename_tensor_name=None,
-        output_graph=output_graph_filename,
-        clear_devices=True,
-        initializer_nodes=initializer_nodes,
-        input_meta_graph=False,
-        input_saved_model_dir=model_dir,
-        saved_model_tags=tag_constants.SERVING)
-    """
-
-
+    # save model
     tf.train.write_graph(tf.get_default_graph(), model_path, 'saved_model.pb', as_text=False)
     tf.train.write_graph(tf.get_default_graph(), model_path, 'saved_model.pbtxt', as_text=True)
 
-    gf = tf.GraphDef()
-    gf.ParseFromString(open(os.path.join(model_path, 'saved_model.pb'), 'rb').read())
-
-    nodes = [n.name + '=>' + n.op for n in gf.node if n.op in ('Softmax', 'Placeholder')]
-    print(nodes)
-
-    # Convert the model.
-    converter = tf.lite.TFLiteConverter.from_session(sess, [input_photo], [final_out]) # -- 7.6MB
-    converter.optimizations = [tf.lite.Optimize.DEFAULT] # -- 3.7 MB
+    # Convert the model to tflite for mobile.
+    converter = tf.lite.TFLiteConverter.from_session(sess, [input_photo], [final_out])  # -- 7.6MB
+    converter.optimizations = [tf.lite.Optimize.DEFAULT]  # -- 3.7 MB
 
     tflite_model = converter.convert()
 
